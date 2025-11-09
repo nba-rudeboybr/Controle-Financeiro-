@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Teste API</title>
+</head>
+<body>
+    <h1>🔍 Teste da API</h1>
+    <div id="result"></div>
+    
+    <script>
+        const resultDiv = document.getElementById('result');
+        
+        async function testarAPI() {
+            try {
+                resultDiv.innerHTML = '<p>⏳ Testando API...</p>';
+                
+                // Teste 1: Categorias
+                const resCat = await fetch('http://localhost:8081/api/categorias');
+                const categorias = await resCat.json();
+                
+                resultDiv.innerHTML += `<p>✅ Categorias: ${categorias.length} encontradas</p>`;
+                
+                // Teste 2: Transações
+                const resTrans = await fetch('http://localhost:8081/api/transacoes');
+                const transacoes = await resTrans.json();
+                
+                resultDiv.innerHTML += `<p>✅ Transações: ${transacoes.length} encontradas</p>`;
+                resultDiv.innerHTML += `<p>🎉 <strong>API funcionando perfeitamente!</strong></p>`;
+                
+                // Mostrar dados
+                resultDiv.innerHTML += '<h3>📋 Categorias:</h3>';
+                resultDiv.innerHTML += '<pre>' + JSON.stringify(categorias, null, 2) + '</pre>';
+                
+            } catch (error) {
+                resultDiv.innerHTML += `<p style="color: red;">❌ ERRO: ${error.message}</p>`;
+                console.error('Erro completo:', error);
+            }
+        }
+        
+        testarAPI();
+    </script>
+</body>
+</html>
+
