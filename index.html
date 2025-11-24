@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 Controle Financeiro - Spring Boot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>💰 Controle Financeiro</h1>
+            <p class="subtitle">Microserviço Spring Boot + API REST</p>
+            <div class="api-status">
+                <span id="apiStatus" class="status offline">● API Offline</span>
+                <span class="separator">|</span>
+                <a href="https://controle-financeiro-dl2j.onrender.com/swagger-ui.html" target="_blank">📚 Swagger</a>
+            </div>
+        </header>
+
+        <!-- Resumo Financeiro -->
+        <div class="summary-cards">
+            <div class="card receitas">
+                <div class="card-icon">💰</div>
+                <div class="card-content">
+                    <h3>Receitas</h3>
+                    <p class="value" id="totalReceitas">R$ 0,00</p>
+                </div>
+            </div>
+            <div class="card despesas">
+                <div class="card-icon">💸</div>
+                <div class="card-content">
+                    <h3>Despesas</h3>
+                    <p class="value" id="totalDespesas">R$ 0,00</p>
+                </div>
+            </div>
+            <div class="card saldo">
+                <div class="card-icon">💵</div>
+                <div class="card-content">
+                    <h3>Saldo</h3>
+                    <p class="value" id="saldo">R$ 0,00</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulário -->
+        <div class="form-section">
+            <h2>➕ Nova Transação</h2>
+            <form id="transacaoForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="descricao">Descrição *</label>
+                        <input type="text" id="descricao" placeholder="Ex: Almoço no restaurante" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="valor">Valor (R$) *</label>
+                        <input type="number" id="valor" step="0.01" placeholder="150.00" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="data">Data *</label>
+                        <input type="date" id="data" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoria">Categoria *</label>
+                        <input type="text" id="categoria" placeholder="Ex: Salário, Alimentação..." required list="categoriasList">
+                        <datalist id="categoriasList"></datalist>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="observacoes">Observações (opcional)</label>
+                    <input type="text" id="observacoes" placeholder="Ex: Pagamento com cartão">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-receita" data-tipo="RECEITA">
+                        💰 Adicionar Receita
+                    </button>
+                    <button type="submit" class="btn btn-despesa" data-tipo="DESPESA">
+                        💸 Adicionar Despesa
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tabela de Transações -->
+        <div class="transactions-section">
+            <h2>📋 Extrato de Transações</h2>
+            <div class="table-container">
+                <table id="transacoesTable">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th>Categoria</th>
+                            <th>Tipo</th>
+                            <th>Valor</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transacoesBody">
+                        <tr>
+                            <td colspan="6" class="loading">Carregando transações...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>🚀 Desenvolvido com Spring Boot 3.2.0 + Java 17</p>
+            <p class="small">Microserviço RESTful com 16 endpoints | 90%+ cobertura de testes</p>
+        </footer>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div id="modalConfirmacao" class="modal">
+        <div class="modal-content">
+            <h3>✅ Sucesso!</h3>
+            <p id="modalMensagem"></p>
+            <button id="modalFechar" class="btn btn-primary">OK</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

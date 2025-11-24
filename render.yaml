@@ -1,0 +1,36 @@
+services:
+  # Serviço Web (API Spring Boot)
+  - type: web
+    name: controle-financeiro-api
+    env: java
+    plan: free
+    region: oregon
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java $JAVA_OPTS -jar target/controle-financeiro-api-1.0.0.jar
+    envVars:
+      - key: SPRING_PROFILE
+        value: prod
+      - key: JAVA_OPTS
+        value: -Xmx512m -Xms256m
+      # A variável PORT é definida automaticamente pelo Render
+      # As variáveis do banco de dados (DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD)
+      # serão linkadas automaticamente quando você linkar o PostgreSQL no dashboard
+      # Vá em "Environment" > "Link Database" e selecione o PostgreSQL criado abaixo
+
+  # Banco de Dados PostgreSQL
+  - type: pg
+    name: controle-financeiro-db
+    plan: free
+    databaseName: financeiro
+    user: financeiro_user
+
+  # Frontend (Site Estático com Node.js)
+  - type: web
+    name: controle-financeiro-frontend
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    # A variável PORT é definida automaticamente pelo Render
+
