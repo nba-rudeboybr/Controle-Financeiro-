@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function configurarLinks() {
     const hostname = window.location.hostname;
     const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '';
+    const isRender = hostname.includes('onrender.com');
     
     // Link do Swagger
     const swaggerLink = document.getElementById('swaggerLink');
@@ -33,19 +34,18 @@ function configurarLinks() {
             : 'https://controle-financeiro-dl2j.onrender.com/swagger-ui/index.html';
     }
     
-    // Link do H2 Console (só aparece em localhost)
+    // Link do H2 Console (só aparece em localhost, nunca no Render)
     const h2Link = document.getElementById('h2Link');
     const h2Separator = document.getElementById('h2Separator');
     if (h2Link && h2Separator) {
-        if (isLocalhost) {
+        if (isLocalhost && !isRender) {
+            // Mostrar apenas em localhost
             h2Link.style.display = 'inline';
             h2Separator.style.display = 'inline';
         } else {
-            // Forçar ocultação em produção
+            // Ocultar no Render ou qualquer outro ambiente
             h2Link.style.display = 'none';
             h2Separator.style.display = 'none';
-            h2Link.style.visibility = 'hidden';
-            h2Separator.style.visibility = 'hidden';
         }
     }
 }
