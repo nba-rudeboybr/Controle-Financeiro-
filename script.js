@@ -30,9 +30,11 @@ function configurarLinks() {
     // Link do Swagger
     const swaggerLink = document.getElementById('swaggerLink');
     if (swaggerLink) {
-        swaggerLink.href = isLocalhost 
-            ? 'http://localhost:8081/swagger-ui.html'
-            : 'https://controle-financeiro-dl2j.onrender.com/swagger-ui.html';
+        // Springdoc OpenAPI 2.x usa /swagger-ui/index.html ou /swagger-ui.html
+        const swaggerPath = isLocalhost 
+            ? 'http://localhost:8081/swagger-ui/index.html'
+            : 'https://controle-financeiro-dl2j.onrender.com/swagger-ui/index.html';
+        swaggerLink.href = swaggerPath;
     }
     
     // Link do H2 Console (só aparece em localhost)
