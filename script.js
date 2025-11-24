@@ -22,40 +22,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Configurar links dinamicamente baseado no ambiente
 function configurarLinks() {
-    const hostname = window.location.hostname;
-    const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '';
-    
-    console.log('Configurando links - hostname:', hostname, 'isLocalhost:', isLocalhost);
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     
     // Link do Swagger
     const swaggerLink = document.getElementById('swaggerLink');
     if (swaggerLink) {
-        // Springdoc OpenAPI 2.x usa /swagger-ui/index.html ou /swagger-ui.html
-        const swaggerPath = isLocalhost 
+        swaggerLink.href = isLocalhost 
             ? 'http://localhost:8081/swagger-ui/index.html'
             : 'https://controle-financeiro-dl2j.onrender.com/swagger-ui/index.html';
-        swaggerLink.href = swaggerPath;
     }
     
     // Link do H2 Console (só aparece em localhost)
     const h2Link = document.getElementById('h2Link');
     const h2Separator = document.getElementById('h2Separator');
-    
-    console.log('Elementos H2 encontrados:', { h2Link: !!h2Link, h2Separator: !!h2Separator });
-    
     if (h2Link && h2Separator) {
         if (isLocalhost) {
             h2Link.style.display = 'inline';
             h2Separator.style.display = 'inline';
-            console.log('H2 Console link mostrado');
         } else {
-            // Oculta em produção
             h2Link.style.display = 'none';
             h2Separator.style.display = 'none';
-            console.log('H2 Console link oculto (produção)');
         }
-    } else {
-        console.error('Elementos H2 não encontrados no DOM!');
     }
 }
 
@@ -93,26 +80,16 @@ function configurarEventos() {
 async function verificarStatusAPI() {
     const statusElement = document.getElementById('apiStatus');
     try {
-        console.log('Verificando status da API:', CATEGORIAS_URL);
         const response = await fetch(CATEGORIAS_URL);
-        console.log('Resposta da API:', response.status, response.statusText);
         if (response.ok) {
             statusElement.textContent = '● API Online';
             statusElement.className = 'status online';
-            console.log('✅ API está online');
         } else {
-            const errorText = await response.text();
-            console.error('API retornou erro:', response.status, errorText);
-            throw new Error(`API retornou ${response.status}`);
+            throw new Error('API offline');
         }
     } catch (error) {
-        console.error('Erro ao verificar API:', error);
         statusElement.textContent = '● API Offline';
         statusElement.className = 'status offline';
-        // Não mostrar erro se for apenas problema de rede em desenvolvimento
-        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-            mostrarErro('⚠️ API não está respondendo. Verifique a conexão.');
-        }
     }
 }
 
@@ -122,15 +99,7 @@ async function carregarCategorias() {
         const response = await fetch(CATEGORIAS_URL);
         
         if (!response.ok) {
-            let errorMessage = 'Erro ao carregar categorias';
-            try {
-                const error = await response.json();
-                errorMessage = error.message || error.error || errorMessage;
-                console.error('Erro ao carregar categorias:', error);
-            } catch (e) {
-                errorMessage = `Erro ${response.status}: ${response.statusText}`;
-            }
-            throw new Error(errorMessage);
+            throw new Error('Erro ao carregar categorias');
         }
         
         categorias = await response.json();
@@ -203,15 +172,7 @@ async function carregarTransacoes() {
         const response = await fetch(API_URL);
         
         if (!response.ok) {
-            let errorMessage = 'Erro ao carregar transações';
-            try {
-                const error = await response.json();
-                errorMessage = error.message || error.error || errorMessage;
-                console.error('Erro da API:', error);
-            } catch (e) {
-                errorMessage = `Erro ${response.status}: ${response.statusText}`;
-            }
-            throw new Error(errorMessage);
+            throw new Error('Erro ao carregar transações');
         }
         
         transacoes = await response.json();
@@ -221,9 +182,8 @@ async function carregarTransacoes() {
         
     } catch (error) {
         console.error('Erro ao carregar transações:', error);
-        const errorMsg = error.message || 'Erro ao carregar transações';
         document.getElementById('transacoesBody').innerHTML = `
-            <tr><td colspan="6" class="error">${errorMsg}</td></tr>
+            <tr><td colspan="6" class="error">Erro ao carregar transações</td></tr>
         `;
     }
 }
@@ -349,15 +309,7 @@ async function adicionarTransacao(tipo) {
             });
 
             if (!responseCat.ok) {
-                let errorMessage = 'Erro ao criar categoria';
-                try {
-                    const error = await responseCat.json();
-                    errorMessage = error.message || error.error || errorMessage;
-                    console.error('Erro ao criar categoria:', error);
-                } catch (e) {
-                    errorMessage = `Erro ${responseCat.status}: ${responseCat.statusText}`;
-                }
-                throw new Error(errorMessage);
+                throw new Error('Erro ao criar categoria');
             }
 
             categoria = await responseCat.json();
@@ -384,16 +336,8 @@ async function adicionarTransacao(tipo) {
         });
 
         if (!response.ok) {
-            let errorMessage = 'Erro ao criar transação';
-            try {
-                const error = await response.json();
-                errorMessage = error.message || error.error || errorMessage;
-                console.error('Erro da API:', error);
-            } catch (e) {
-                console.error('Erro ao processar resposta:', e);
-                errorMessage = `Erro ${response.status}: ${response.statusText}`;
-            }
-            throw new Error(errorMessage);
+            const error = await response.json();
+            throw new Error(error.message || 'Erro ao criar transação');
         }
 
         const novaTransacao = await response.json();
