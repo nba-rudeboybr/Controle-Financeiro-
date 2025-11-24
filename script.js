@@ -93,17 +93,26 @@ function configurarEventos() {
 async function verificarStatusAPI() {
     const statusElement = document.getElementById('apiStatus');
     try {
+        console.log('Verificando status da API:', CATEGORIAS_URL);
         const response = await fetch(CATEGORIAS_URL);
+        console.log('Resposta da API:', response.status, response.statusText);
         if (response.ok) {
             statusElement.textContent = '● API Online';
             statusElement.className = 'status online';
+            console.log('✅ API está online');
         } else {
-            throw new Error('API offline');
+            const errorText = await response.text();
+            console.error('API retornou erro:', response.status, errorText);
+            throw new Error(`API retornou ${response.status}`);
         }
     } catch (error) {
+        console.error('Erro ao verificar API:', error);
         statusElement.textContent = '● API Offline';
         statusElement.className = 'status offline';
-        mostrarErro('⚠️ API não está respondendo. Verifique se está rodando na porta 8081');
+        // Não mostrar erro se for apenas problema de rede em desenvolvimento
+        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+            mostrarErro('⚠️ API não está respondendo. Verifique a conexão.');
+        }
     }
 }
 
