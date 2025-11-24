@@ -12,12 +12,39 @@ let transacoes = [];
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
+    configurarLinks();
     setDataAtual();
     verificarStatusAPI();
     carregarCategorias();
     carregarTransacoes();
     configurarEventos();
 });
+
+// Configurar links dinamicamente baseado no ambiente
+function configurarLinks() {
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    // Link do Swagger
+    const swaggerLink = document.getElementById('swaggerLink');
+    if (swaggerLink) {
+        swaggerLink.href = isLocalhost 
+            ? 'http://localhost:8081/swagger-ui.html'
+            : 'https://controle-financeiro-dl2j.onrender.com/swagger-ui.html';
+    }
+    
+    // Link do H2 Console (só mostra em localhost)
+    const h2Link = document.getElementById('h2Link');
+    const h2Separator = document.getElementById('h2Separator');
+    if (h2Link && h2Separator) {
+        if (isLocalhost) {
+            h2Link.style.display = 'inline';
+            h2Separator.style.display = 'inline';
+        } else {
+            h2Link.style.display = 'none';
+            h2Separator.style.display = 'none';
+        }
+    }
+}
 
 // Configurar data atual
 function setDataAtual() {
