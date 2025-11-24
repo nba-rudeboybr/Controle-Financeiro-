@@ -80,11 +80,37 @@ public class GlobalExceptionHandler {
             Exception ex, 
             WebRequest request) {
         
+        // Log do erro completo para debug
+        ex.printStackTrace();
+        System.err.println("Erro não tratado: " + ex.getClass().getName());
+        System.err.println("Mensagem: " + ex.getMessage());
+        if (ex.getCause() != null) {
+            System.err.println("Causa: " + ex.getCause().getMessage());
+        }
+        
+        // Em produção, não expor detalhes do erro
+        String errorMessage = "Ocorreu um erro interno no servidor";
+        String errorDetail = ex.getClass().getSimpleName();
+        
+        // Se for erro de banco de dados, dar mensagem mais específica
+        if (ex.getMessage() != null && (
+            ex.getMessage().contains("database") || 
+            ex.getMessage().contains("connection") ||
+            ex.getMessage().contains("DataSource") ||
+            ex.getMessage().contains("PostgreSQL") ||
+            ex.getCause() != null && (
+                ex.getCause().getMessage().contains("database") ||
+                ex.getCause().getMessage().contains("connection")
+            )
+        )) {
+            errorMessage = "Erro de conexão com o banco de dados. Verifique a configuração.";
+        }
+        
         ErrorResponse error = new ErrorResponse(
             LocalDateTime.now(),
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             "Internal Server Error",
-            "Ocorreu um erro interno no servidor",
+            errorMessage,
             request.getDescription(false).replace("uri=", "")
         );
         
