@@ -22,7 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Configurar links dinamicamente baseado no ambiente
 function configurarLinks() {
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const hostname = window.location.hostname;
+    const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '';
+    
+    console.log('Configurando links - hostname:', hostname, 'isLocalhost:', isLocalhost);
     
     // Link do Swagger
     const swaggerLink = document.getElementById('swaggerLink');
@@ -35,15 +38,22 @@ function configurarLinks() {
     // Link do H2 Console (só aparece em localhost)
     const h2Link = document.getElementById('h2Link');
     const h2Separator = document.getElementById('h2Separator');
+    
+    console.log('Elementos H2 encontrados:', { h2Link: !!h2Link, h2Separator: !!h2Separator });
+    
     if (h2Link && h2Separator) {
         if (isLocalhost) {
             h2Link.style.display = 'inline';
             h2Separator.style.display = 'inline';
+            console.log('H2 Console link mostrado');
         } else {
             // Oculta em produção
             h2Link.style.display = 'none';
             h2Separator.style.display = 'none';
+            console.log('H2 Console link oculto (produção)');
         }
+    } else {
+        console.error('Elementos H2 não encontrados no DOM!');
     }
 }
 
