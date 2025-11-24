@@ -113,7 +113,15 @@ async function carregarCategorias() {
         const response = await fetch(CATEGORIAS_URL);
         
         if (!response.ok) {
-            throw new Error('Erro ao carregar categorias');
+            let errorMessage = 'Erro ao carregar categorias';
+            try {
+                const error = await response.json();
+                errorMessage = error.message || error.error || errorMessage;
+                console.error('Erro ao carregar categorias:', error);
+            } catch (e) {
+                errorMessage = `Erro ${response.status}: ${response.statusText}`;
+            }
+            throw new Error(errorMessage);
         }
         
         categorias = await response.json();
@@ -186,7 +194,15 @@ async function carregarTransacoes() {
         const response = await fetch(API_URL);
         
         if (!response.ok) {
-            throw new Error('Erro ao carregar transações');
+            let errorMessage = 'Erro ao carregar transações';
+            try {
+                const error = await response.json();
+                errorMessage = error.message || error.error || errorMessage;
+                console.error('Erro da API:', error);
+            } catch (e) {
+                errorMessage = `Erro ${response.status}: ${response.statusText}`;
+            }
+            throw new Error(errorMessage);
         }
         
         transacoes = await response.json();
@@ -196,8 +212,9 @@ async function carregarTransacoes() {
         
     } catch (error) {
         console.error('Erro ao carregar transações:', error);
+        const errorMsg = error.message || 'Erro ao carregar transações';
         document.getElementById('transacoesBody').innerHTML = `
-            <tr><td colspan="6" class="error">Erro ao carregar transações</td></tr>
+            <tr><td colspan="6" class="error">${errorMsg}</td></tr>
         `;
     }
 }
@@ -323,7 +340,15 @@ async function adicionarTransacao(tipo) {
             });
 
             if (!responseCat.ok) {
-                throw new Error('Erro ao criar categoria');
+                let errorMessage = 'Erro ao criar categoria';
+                try {
+                    const error = await responseCat.json();
+                    errorMessage = error.message || error.error || errorMessage;
+                    console.error('Erro ao criar categoria:', error);
+                } catch (e) {
+                    errorMessage = `Erro ${responseCat.status}: ${responseCat.statusText}`;
+                }
+                throw new Error(errorMessage);
             }
 
             categoria = await responseCat.json();
@@ -350,8 +375,16 @@ async function adicionarTransacao(tipo) {
         });
 
         if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'Erro ao criar transação');
+            let errorMessage = 'Erro ao criar transação';
+            try {
+                const error = await response.json();
+                errorMessage = error.message || error.error || errorMessage;
+                console.error('Erro da API:', error);
+            } catch (e) {
+                console.error('Erro ao processar resposta:', e);
+                errorMessage = `Erro ${response.status}: ${response.statusText}`;
+            }
+            throw new Error(errorMessage);
         }
 
         const novaTransacao = await response.json();
