@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Configurar links dinamicamente baseado no ambiente
 function configurarLinks() {
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const hostname = window.location.hostname;
+    const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '';
     
     // Link do Swagger
     const swaggerLink = document.getElementById('swaggerLink');
@@ -40,8 +41,11 @@ function configurarLinks() {
             h2Link.style.display = 'inline';
             h2Separator.style.display = 'inline';
         } else {
+            // Forçar ocultação em produção
             h2Link.style.display = 'none';
             h2Separator.style.display = 'none';
+            h2Link.style.visibility = 'hidden';
+            h2Separator.style.visibility = 'hidden';
         }
     }
 }
