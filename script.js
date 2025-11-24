@@ -32,17 +32,16 @@ function configurarLinks() {
             : 'https://controle-financeiro-dl2j.onrender.com/swagger-ui.html';
     }
     
-    // Link do H2 Console (só mostra em localhost)
+    // Link do H2 Console (mostra sempre, mas só funciona em localhost)
     const h2Link = document.getElementById('h2Link');
     const h2Separator = document.getElementById('h2Separator');
     if (h2Link && h2Separator) {
-        if (isLocalhost) {
-            h2Link.style.display = 'inline';
-            h2Separator.style.display = 'inline';
-        } else {
-            h2Link.style.display = 'none';
-            h2Separator.style.display = 'none';
-        }
+        h2Link.style.display = 'inline';
+        h2Separator.style.display = 'inline';
+        // Atualiza a URL do H2 baseado no ambiente
+        h2Link.href = isLocalhost 
+            ? 'http://localhost:8081/h2-console'
+            : 'https://controle-financeiro-dl2j.onrender.com/h2-console';
     }
 }
 
