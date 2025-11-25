@@ -18,7 +18,7 @@ services:
       # Vá em "Environment" > "Link Database" e selecione o PostgreSQL criado abaixo
 
   # Banco de Dados PostgreSQL
-  - type: postgresql
+  - type: postgres
     name: controle-financeiro-db
     plan: free
     databaseName: financeiro
