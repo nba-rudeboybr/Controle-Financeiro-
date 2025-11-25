@@ -15,14 +15,9 @@ services:
       # A variável PORT é definida automaticamente pelo Render
       # As variáveis do banco de dados (DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD)
       # serão linkadas automaticamente quando você linkar o PostgreSQL no dashboard
-      # Vá em "Environment" > "Link Database" e selecione o PostgreSQL criado abaixo
-
-  # Banco de Dados PostgreSQL
-  - type: postgres
-    name: controle-financeiro-db
-    plan: free
-    databaseName: financeiro
-    user: financeiro_user
+      # Vá em "Environment" > "Link Database" e selecione o PostgreSQL criado manualmente
+      # NOTA: PostgreSQL precisa ser criado manualmente no Render Dashboard
+      # Depois de criar, linke ao serviço do backend em "Environment" > "Link Database"
 
   # Frontend (Site Estático com Node.js)
   - type: web
