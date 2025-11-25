@@ -34,8 +34,9 @@ public class RenderDatabaseConfig {
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
-        // Se DATABASE_URL estiver no formato postgres://
-        if (databaseUrl != null && !databaseUrl.isEmpty() && databaseUrl.startsWith("postgres://")) {
+        // Se DATABASE_URL estiver no formato postgres:// ou postgresql://
+        if (databaseUrl != null && !databaseUrl.isEmpty() && 
+            (databaseUrl.startsWith("postgres://") || databaseUrl.startsWith("postgresql://"))) {
             try {
                 return createDataSourceFromPostgresUrl(databaseUrl);
             } catch (URISyntaxException e) {
@@ -60,7 +61,9 @@ public class RenderDatabaseConfig {
     }
 
     private DataSource createDataSourceFromPostgresUrl(String databaseUrl) throws URISyntaxException {
-        URI dbUri = new URI(databaseUrl);
+        // Normalizar postgresql:// para postgres:// para parsing do URI
+        String normalizedUrl = databaseUrl.replace("postgresql://", "postgres://");
+        URI dbUri = new URI(normalizedUrl);
         
         String username = dbUri.getUserInfo().split(":")[0];
         String password = dbUri.getUserInfo().split(":")[1];
