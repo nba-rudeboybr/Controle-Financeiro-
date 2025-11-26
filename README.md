@@ -422,12 +422,12 @@ O Render oferece plano free com PostgreSQL incluído, ideal para este projeto.
 
 | Membro | Responsabilidade | Arquivos |
 |--------|-----------------|----------|
-| **Aluno 1** | Configuração inicial e entidades | pom.xml, Transacao, Categoria, TipoTransacao |
-| **Aluno 2** | Repositórios e camada de serviço | TransacaoRepository, CategoriaRepository, Services |
-| **Aluno 3** | Controllers e documentação Swagger | TransacaoController, CategoriaController |
-| **Aluno 4** | DTOs, validações e resumos | DTOs, ResumoFinanceiroDTO, validações |
-| **Aluno 5** | Exceções e testes unitários | Exception classes, TransacaoServiceTest, ControllerTest |
-| **Aluno 6** | Configurações e deploy | application.properties, Dockerfile, README, data.sql |
+| **Nikolas** | Configuração inicial e entidades | pom.xml, Transacao, Categoria, TipoTransacao |
+| **Eduardo** | Repositórios e camada de serviço | TransacaoRepository, CategoriaRepository, Services |
+| **Kaique** | Controllers e documentação Swagger | TransacaoController, CategoriaController |
+| **Marcela** | DTOs, validações e resumos | DTOs, ResumoFinanceiroDTO, validações |
+| **Ezequiel** | Exceções e testes unitários | Exception classes, TransacaoServiceTest, ControllerTest |
+| **Gustavo** | Configurações e deploy | application.properties, Dockerfile, README, data.sql |
 
 ## 📝 Boas Práticas Implementadas
 
